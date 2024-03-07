@@ -31,6 +31,8 @@ For details, refer to [the paper](https://dl.acm.org/doi/10.1145/3610548.3618234
 In the `build` folder, run either of the executables with no extra arguments for help.
 `./merge-vertices <eps> <algorithm> <path-to-ply-dataset> <number of cores to launch> <optional-output-path>`
 
+**Note:** The index construction uses the [nanoflann](https://github.com/jlblancoc/nanoflann) library, and will only use 1 thread by default unless changed in `nanoflann.hpp` (change `unsigned int _n_thread_build = 1` to `unsigned int _n_thread_build = 0` in constructor of `KDTreeSingleIndexAdaptorParams`).
+
 __Note that the only accepted dataset type at the moment is ply__
 
 ## Citation

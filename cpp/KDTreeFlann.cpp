@@ -112,7 +112,7 @@ int KDTreeFlann::SearchKNN(const T &query,
     indices.resize(knn);
     distance2.resize(knn);
     std::vector<Eigen::Index> indices_eigen(knn);
-    int k = nanoflann_index_->index->knnSearch(
+    int k = nanoflann_index_->index_->knnSearch(
             query.data(), knn, indices_eigen.data(), distance2.data());
     indices.resize(k);
     distance2.resize(k);
@@ -133,10 +133,10 @@ int KDTreeFlann::SearchRadius(const T &query,
         size_t(query.rows()) != dimension_) {
         return -1;
     }
-    std::vector<std::pair<Eigen::Index, double>> indices_dists;
-    int k = nanoflann_index_->index->radiusSearch(
+    std::vector<nanoflann::ResultItem<Eigen::Index, double>> indices_dists;
+    int k = nanoflann_index_->index_->radiusSearch(
             query.data(), radius * radius, indices_dists,
-            nanoflann::SearchParams(-1, 0.0));
+            nanoflann::SearchParameters(-1, 0.0));
     indices.resize(k);
     distance2.resize(k);
     for (int i = 0; i < k; ++i) {
@@ -159,10 +159,10 @@ int KDTreeFlann::SearchRadiusNotGreater(const T &query,
         size_t(query.rows()) != dimension_) {
         return -1;
     }
-    std::vector<std::pair<Eigen::Index, double>> indices_dists;
-    int k = nanoflann_index_->index->radiusSearch(
+    std::vector<nanoflann::ResultItem<Eigen::Index, double>> indices_dists;
+    int k = nanoflann_index_->index_->radiusSearch(
             query.data(), radius * radius, indices_dists,
-            nanoflann::SearchParams(-1, 0.0));
+            nanoflann::SearchParameters(-1, 0.0));
     indices.resize(k);
     int kk = 0;
     for (int i = 0; i < k; ++i) {
@@ -187,10 +187,10 @@ int KDTreeFlann::SearchRadiusSmallerAndBigger(const T &query,
         size_t(query.rows()) != dimension_) {
         return -1;
     }
-    std::vector<std::pair<Eigen::Index, double>> indices_dists;
-    int k = nanoflann_index_->index->radiusSearch(
+    std::vector<nanoflann::ResultItem<Eigen::Index, double>> indices_dists;
+    int k = nanoflann_index_->index_->radiusSearch(
             query.data(), radius * radius, indices_dists,
-            nanoflann::SearchParams(-1, 0.0));
+            nanoflann::SearchParameters(-1, 0.0));
     indices_bigger.resize(k);
     int kSmaller = 0, kBigger = 0;
     for (int i = 0; i < k; ++i) {
@@ -226,7 +226,7 @@ int KDTreeFlann::SearchHybrid(const T &query,
     }
     distance2.resize(max_nn);
     std::vector<Eigen::Index> indices_eigen(max_nn);
-    int k = nanoflann_index_->index->knnSearch(
+    int k = nanoflann_index_->index_->knnSearch(
             query.data(), max_nn, indices_eigen.data(), distance2.data());
     k = std::distance(distance2.begin(),
                       std::lower_bound(distance2.begin(), distance2.begin() + k,
@@ -249,7 +249,7 @@ bool KDTreeFlann::SetRawData(const Eigen::Map<const Eigen::MatrixXd> &data) {
     data_interface_.reset(new Eigen::Map<const Eigen::MatrixXd>(data));
     nanoflann_index_.reset(
             new KDTree_t(dimension_, std::cref(*data_interface_), 15));
-    nanoflann_index_->index->buildIndex();
+    nanoflann_index_->index_->buildIndex();
     return true;
 }
 
