@@ -101,6 +101,21 @@ public:
                      double radius,
                      std::vector<int> &indices,
                      std::vector<double> &distance2) const;
+
+    /*
+     * Populates indices vector with the id of points within a given radius
+     * whose ids are not larger than the given query point.
+     * Returns the size of that vector or -1 if there is an error.
+    */
+    template <typename T>
+    int SearchRadiusNotGreater (
+        const T &query,
+        double radius,
+        std::vector<int> &indices,
+        [[maybe_unused]]std::vector<double> &distance2,
+        int currentIdx
+    ) const;
+
     /*
     returns the number of neighbours with smaller ids and 
     populates indices_bigger vector with the id of neighbours with bigger ids
