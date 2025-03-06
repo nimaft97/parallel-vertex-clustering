@@ -128,6 +128,13 @@ public:
                          const int currentIdx) const;
 
     template <typename T>
+    int SearchRadiusNotGreater(const T &query,
+                         double radius,
+                         std::vector<int> &indices,
+                         [[maybe_unused]]std::vector<double> &distance2,
+                         const int currentIdx) const;
+
+    template <typename T>
     int SearchHybrid(const T &query,
                      double radius,
                      int max_nn,
